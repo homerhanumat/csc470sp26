@@ -1,0 +1,41 @@
+You will solve some problems from the online textbook
+"Beginning Computer Science With R", whihc is located at this
+URL:
+
+https://homerhanumat.github.io/r-notes/
+
+Specifically, you will work Exercises 1, 2, 3, and 4 from Chapter 6.
+
+The exercises are found here:
+
+https://homerhanumat.github.io/r-notes/060-simulation.html#exercises
+
+You may use the Hints provided in the Exercises, if you are able to access
+the links associated with them and if they prove to be
+helpful.
+
+When you are done, gnerate a Quarto file called CSC115_Ch06.qmd.
+
+The YAML front matter for the file should be as follows:
+
+---
+title: 'Homework Chapter 6'
+author: "Databot"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    embed-resources: true
+execute: 
+  error: true
+  warning: false
+---
+
+Here are some requirements for the Quarto formatting:
+
+* Each Exercise is in a section (one hashtag #).
+* For each erxercise, a subsection (##) devoted to a statement of the problem
+* and another subsection (##) for your solution.
+* If you are writing a function, the function-definition
+  goes in its own chunk.
+* Tests of functions go in separate code chunks.

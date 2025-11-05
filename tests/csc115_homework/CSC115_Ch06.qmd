@@ -1,0 +1,368 @@
+---
+title: 'Homework Chapter 6'
+author: "Databot"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    embed-resources: true
+execute: 
+  error: true
+  warning: false
+---
+
+```{r setup, include=FALSE}
+# Turn off scientific notation
+options(scipen = 999)
+```
+
+::: {.callout-note}
+This report was generated using artificial intelligence (Claude from Anthropic) under general human direction. The contents have been reviewed and validated by Homer White on 2025-11-05.
+
+The work was done with the Databot assitant that is integrated into the Positron integrated development environment.  This is a new IDE that is based partly on R Studio.  You can install it for free on your own computer; it is available [here](https://positron.posit.co/).
+
+The prompt to Databot, written into a configuration file called `llm.txt`, was as follows:
+
+<blockquote>
+You will solve some problems from the online textbook
+"Beginning Computer Science With R", which is located at this URL:
+
+* [https://homerhanumat.github.io/r-notes/](https://homerhanumat.github.io/r-notes/)
+
+Specifically, you will work Exercises 1, 2, 3, and 4 from Chapter 6. The exercises are found here:
+
+* [https://homerhanumat.github.io/r-notes/060-simulation.html#exercises](https://homerhanumat.github.io/r-notes/060-simulation.html#exercises)
+
+You may use the Hints provided in the Exercises, if you are able to access the links associated with them and if they prove to be helpful.
+
+When you are done, generate a Quarto file called CSC115_Ch06.qmd.
+
+The YAML front matter for the file should be as follows:
+
+````yml
+---
+title: 'Homework Chapter 6'
+author: "Databot"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    embed-resources: true
+execute: 
+  error: true
+  warning: false
+---
+````
+
+Here are some requirements for the Quarto formatting:
+
+* Each Exercise is in a section (one hashtag #).
+* For each exercise, a subsection (##) devoted to a statement of the problem
+* and another subsection (##) for your solution.
+* If you are writing a function, the function-definition
+  goes in its own chunk.
+* Tests of functions go in separate code chunks.
+</blockquote>
+:::
+
+# Exercise 1
+
+## Problem Statement
+
+Consider the following two games.
+
+**Game A:** You flip a fair coin. If the coin comes up Heads you get two dollars, whereas if it comes up Tails you get one dollar.
+
+**Game B:** You roll a fair die. If the six-spot comes up, you win twenty-five dollars. If you get 2, 3, 4, or 5, nothing happens. If the one-spot comes up, you lose fifteen dollars.
+
+You need to answer two questions:
+
+1. If you could choose to play either Game A or Game B just once, which game would you prefer to play, and why?
+2. Suppose that you can choose either to play Game A ten thousand times, or Game B ten thousand times. Which choice would you prefer, and why?
+
+To answer these questions, write two simulation functions: `GameA()` and `GameB()` that estimate the expected value of winnings from each game. The functions should have:
+
+- A `reps` parameter to permit the user to choose the number of repetitions
+- A `seed` parameter to permit the user to choose a starting seed
+
+Use both functions with fifty thousand reps to obtain estimates for the expected amount of winnings in a single play of each game.
+
+## Solution
+
+First, let's create the simulation functions:
+
+```{r}
+# Game A: Flip a coin - Heads = $2, Tails = $1
+GameA <- function(reps = 10000, seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  # Simulate coin flips by sampling dollar amounts directly
+  outcomes <- sample(c(2, 1), reps, replace = TRUE)
+  
+  # Expected value is the mean of all outcomes
+  expected_value <- mean(outcomes)
+  
+  return(expected_value)
+}
+
+# Game B: Roll a die
+# 6 = win $25
+# 2,3,4,5 = $0
+# 1 = lose $15
+GameB <- function(reps = 10000, seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  # Simulate die rolls
+  die_rolls <- sample(1:6, reps, replace = TRUE)
+  
+  # Calculate winnings for each roll
+  winnings <- ifelse(die_rolls == 6, 25,
+                     ifelse(die_rolls == 1, -15, 0))
+  
+  # Expected value is the mean of all outcomes
+  expected_value <- mean(winnings)
+  
+  return(expected_value)
+}
+```
+
+Now let's test the functions with 50,000 repetitions:
+
+```{r}
+seed_value <- 42
+
+cat("Using seed:", seed_value, "\n\n")
+
+ev_gameA <- GameA(reps = 50000, seed = seed_value)
+cat("Game A Expected Value: $", round(ev_gameA, 4), "\n", sep = "")
+
+ev_gameB <- GameB(reps = 50000, seed = seed_value)
+cat("Game B Expected Value: $", round(ev_gameB, 4), "\n", sep = "")
+```
+
+**Analysis:**
+
+- Game A has an expected value of approximately **$`{r} round(ev_gameA, 2)`** per play
+- Game B has an expected value of approximately **$`{r} round(ev_gameB, 2)`** per play
+
+**Answers to the questions:**
+
+1. **For a single play:** The choice depends on personal risk tolerance. Game A is safer (guaranteed to win $1-$2), while Game B is riskier but has a slightly higher expected value. A risk-averse person might prefer Game A's guaranteed positive outcome, while a risk-tolerant person might prefer Game B's higher expected value.
+
+2. **For 10,000 plays:** I would choose **Game B**. When playing many times, the law of large numbers means the actual average will converge to the expected value. Game B has a higher expected value ($`{r} round(ev_gameB, 2)` vs $`{r} round(ev_gameA, 2)`), so over 10,000 plays, Game B should yield approximately $`{r} round(ev_gameB * 10000, 0)` compared to Game A's $`{r} round(ev_gameA * 10000, 0)`.
+
+# Exercise 2
+
+## Problem Statement
+
+Reconsider the meeting of Anna and Raj. They plan to meet during the same one-hour period, but Anna is willing to wait $a$ minutes and Raj is willing to wait $r$ minutes, where $a$ and $r$ could differ. 
+
+Modify the `meetupSim()` function so that it accepts two additional parameters:
+
+- `a`: the time Anna is willing to wait
+- `r`: the time Raj is willing to wait
+
+Apply the function with ten thousand repetitions to estimate the probability of a meeting, assuming that Anna is willing to wait 13 minutes and Raj is willing to wait 7 minutes.
+
+**Mathematical condition:** They meet if:
+$$anna \le raj + r \text{ and } raj \le anna + a$$
+
+## Solution
+
+```{r}
+meetupSim <- function(reps = 10000, a = 10, r = 10, seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  # Generate arrival times (in minutes from 0 to 60)
+  anna_times <- runif(reps, min = 0, max = 60)
+  raj_times <- runif(reps, min = 0, max = 60)
+  
+  # They meet if:
+  # anna <= raj + r (Anna doesn't arrive too late after Raj leaves)
+  # AND raj <= anna + a (Raj doesn't arrive too late after Anna leaves)
+  meet <- (anna_times <= raj_times + r) & (raj_times <= anna_times + a)
+  
+  # Probability of meeting
+  prob_meet <- mean(meet)
+  
+  return(prob_meet)
+}
+```
+
+Test with Anna waiting 13 minutes and Raj waiting 7 minutes:
+
+```{r}
+seed_value <- 123
+
+cat("Using seed:", seed_value, "\n\n")
+
+prob_meet <- meetupSim(reps = 10000, a = 13, r = 7, seed = seed_value)
+cat("Probability Anna and Raj meet: ", round(prob_meet, 4), "\n", sep = "")
+cat("As percentage: ", round(prob_meet * 100, 2), "%\n", sep = "")
+```
+
+With Anna willing to wait 13 minutes and Raj willing to wait 7 minutes, the estimated probability that they meet is approximately **`{r} round(prob_meet * 100, 1)`%**.
+
+# Exercise 3
+
+## Problem Statement
+
+Review the `duel_sim()` function. Modify the function as follows:
+
+- Add a parameter `abe` that gives the probability for Abe to hit when he shoots
+- Add a parameter `bo` that gives the chance for Bo to hit when he shoots
+- Make the function estimate the **expected value of the number of shots taken** in a duel, rather than the chance for Abe to win
+
+Estimate the expected number of shots when:
+
+1. Abe's chance of hitting is 50% and Bo's chance is 50%
+2. Abe's chance of hitting is 20% and Bo's chance of hitting is 25%
+
+Use one hundred thousand repetitions and report your seed.
+
+## Solution
+
+```{r}
+duel_sim <- function(reps = 10000, abe = 0.5, bo = 0.5, seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  shot_counts <- numeric(reps)
+  
+  for (i in 1:reps) {
+    shots <- 0
+    duel_over <- FALSE
+    
+    while (!duel_over) {
+      # Abe shoots first
+      shots <- shots + 1
+      abe_hits <- runif(1) < abe
+      if (abe_hits) {
+        duel_over <- TRUE
+        next
+      }
+      
+      # Bo shoots (if Abe missed)
+      shots <- shots + 1
+      bo_hits <- runif(1) < bo
+      if (bo_hits) {
+        duel_over <- TRUE
+      }
+    }
+    
+    shot_counts[i] <- shots
+  }
+  
+  # Return the expected number of shots
+  expected_shots <- mean(shot_counts)
+  return(expected_shots)
+}
+```
+
+Test both scenarios:
+
+```{r}
+seed_value <- 456
+
+cat("Using seed:", seed_value, "\n\n")
+
+# Case 1: Both 50% chance
+expected_shots_1 <- duel_sim(reps = 100000, abe = 0.50, bo = 0.50, seed = seed_value)
+cat("Expected shots (Abe=50%, Bo=50%): ", round(expected_shots_1, 4), "\n", sep = "")
+
+# Case 2: Abe 20%, Bo 25%
+expected_shots_2 <- duel_sim(reps = 100000, abe = 0.20, bo = 0.25, seed = seed_value)
+cat("Expected shots (Abe=20%, Bo=25%): ", round(expected_shots_2, 4), "\n", sep = "")
+```
+
+**Results:**
+
+- When both duelists have a 50% chance of hitting, the expected number of shots is approximately **`{r} round(expected_shots_1, 2)`**
+- When Abe has a 20% chance and Bo has a 25% chance of hitting, the expected number of shots is approximately **`{r} round(expected_shots_2, 2)`**
+
+This makes intuitive sense: when both are equally skilled at 50%, the duel ends quickly (about 2 shots). When both are poor shots (20% and 25%), the duel takes much longer (about 4.5 shots).
+
+# Exercise 4
+
+## Problem Statement
+
+A candy-maker makes a particular type of candy that always has 20 candies in each bag. When you buy a bag, you take a few candies from it every day until they are all gone. The amount you take each day is a random whole number from 1 to 10.
+
+Example scenario:
+
+- Day 1: take 4 candies (16 left)
+- Day 2: take 8 candies (8 left)
+- Day 3: take 3 candies (5 left)
+- Day 4: take 6 candies (only 5 left, so take all 5)
+
+Total: 4 days to finish the bag.
+
+Write a function called `daysNeededSim()` that will estimate the expected number of days required to empty a bag. It should take two parameters:
+
+- `reps`: the number of times to simulate the process (default: 10,000)
+- `seed`: a random seed (default: NULL)
+
+Apply the function with 50,000 repetitions to estimate the expected number of days.
+
+## Solution
+
+First, create a helper function to simulate emptying one bag:
+
+```{r}
+# Helper function: simulate emptying one bag
+empty_one_bag <- function() {
+  candies_left <- 20
+  days <- 0
+  
+  while (candies_left > 0) {
+    days <- days + 1
+    # Take a random number from 1 to 10
+    candies_to_take <- sample(1:10, 1)
+    # Can't take more than what's left
+    candies_taken <- min(candies_to_take, candies_left)
+    candies_left <- candies_left - candies_taken
+  }
+  
+  return(days)
+}
+```
+
+Now create the main simulation function:
+
+```{r}
+daysNeededSim <- function(reps = 10000, seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  days_needed <- numeric(reps)
+  
+  for (i in 1:reps) {
+    days_needed[i] <- empty_one_bag()
+  }
+  
+  # Return expected number of days
+  expected_days <- mean(days_needed)
+  return(expected_days)
+}
+```
+
+Test with 50,000 repetitions:
+
+```{r}
+seed_value <- 789
+
+cat("Using seed:", seed_value, "\n\n")
+
+expected_days <- daysNeededSim(reps = 50000, seed = seed_value)
+cat("Expected number of days to empty bag: ", round(expected_days, 4), "\n", sep = "")
+```
+
+The expected number of days to empty a bag of 20 candies is approximately **`{r} round(expected_days, 2)` days**. This makes sense because on average, you take about 5.5 candies per day (the mean of 1-10), and 20 ÷ 5.5 ≈ 3.6 days. The actual result is slightly higher because of the discrete nature of the problem (you can't take partial candies on the last day).
