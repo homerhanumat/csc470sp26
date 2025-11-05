@@ -1,0 +1,169 @@
+
+---
+title: "Event Organizers Analysis: Participation Summary"
+author: "Databot Analysis"
+date: "November 4, 2025"
+format: 
+  html:
+    toc: true
+    code-fold: false
+    theme: cosmo
+    embed-resources: true
+---
+
+::: {.callout-note}
+This report was generated using artificial intelligence (Claude from Anthropic) under general human direction. At the time of generation, the contents have not been comprehensively reviewed by a human analyst.
+
+<!--
+To indicate human review: Delete the line above about contents not being reviewed, and replace this comment with:
+The contents have been reviewed and validated by [Your Name], [Your Role] on [Date].
+-->
+:::
+
+## Introduction
+
+This report analyzes event organizers from the tigerData package, specifically examining which participants have organized events and measuring their reach by counting the total number of people who have actually attended their events. The analysis uses data from the Zen Center's participant and event records.
+
+## Data Sources
+
+The analysis utilizes three tables from the tigerData package:
+
+1. **`participant`**: Contains information about Zen Center members including their names, contact information, and unique participant IDs
+2. **`event`**: Contains information about events including type, location, timing, cost, and crucially, the `Part_ID` of the organizer
+3. **`eventParticipation`**: A junction table that records which participants attended which events, including an `EP_Attended` field to track actual attendance
+
+These tables are related through the `Part_ID` and `Event_ID` fields, allowing us to link organizers to their events and count the total participants across all events they organized.
+
+## Data Preparation and Analysis
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tigerData)
+library(dplyr)
+library(knitr)
+```
+
+Let's first examine the structure of our key tables:
+
+```{r}
+#| label: examine-data
+
+# Participant table structure
+head(participant, 3)
+
+# Event table structure (showing organizer relationship)
+head(event, 3)
+
+# Event participation tracking (note the EP_Attended field)
+head(eventParticipation, 3)
+```
+
+## Methodology
+
+The analysis follows these steps:
+
+1. Join the `event` table with `eventParticipation` to connect organizers with all participants in their events
+2. **Filter to include only participants who actually attended** (where `EP_Attended == "yes"`)
+3. Group by organizer ID and count the total number of participants who attended
+4. Join with the `participant` table to retrieve organizer names
+5. Sort results in descending order by total participants
+
+```{r}
+#| label: analysis
+
+# Create the summary table
+organizer_summary <- event |>
+  # Join with eventParticipation to get all participants for each event
+  left_join(eventParticipation, by = "Event_ID") |>
+  # Rename Part_ID columns for clarity
+  rename(Organizer_ID = Part_ID.x, Participant_ID = Part_ID.y) |>
+  # Filter for only those who actually attended
+  filter(EP_Attended == "yes") |>
+  # Group by organizer
+  group_by(Organizer_ID) |>
+  # Count total participants who attended per organizer
+  summarise(Total_Participants = n(), .groups = "drop") |>
+  # Join with participant table to get organizer names
+  left_join(participant, by = c("Organizer_ID" = "Part_ID")) |>
+  # Select relevant columns
+  select(Part_Fname, Part_Lname, Total_Participants) |>
+  # Sort in descending order
+  arrange(desc(Total_Participants))
+```
+
+## Results
+
+The following table shows event organizers ranked by the total number of participants who actually attended their events:
+
+```{r}
+#| label: results-table
+
+organizer_summary |>
+  kable(
+    col.names = c("First Name", "Last Name", "Total Participants Attended"),
+    caption = "Event Organizers Ranked by Total Participant Attendance"
+  )
+```
+
+### Key Findings
+
+- **Ramnath Vidyanathan** has organized events with the highest total attendance, reaching **`{r} organizer_summary$Total_Participants[1]` participants** who actually attended across all their events
+
+- **Gloria Estefan** ranks second with **`{r} organizer_summary$Total_Participants[2]` participants** who attended
+
+- **Victoria Grafton** follows with **`{r} organizer_summary$Total_Participants[3]` participants** who attended
+
+- **Bettina Grumwald** organized events with **`{r} organizer_summary$Total_Participants[4]` participants** who attended
+
+The data shows that `{r} nrow(organizer_summary)` unique participants have served as event organizers during the period covered by this dataset.
+
+## Visualization
+
+```{r}
+#| label: visualization
+#| fig-width: 8
+#| fig-height: 5
+
+library(ggplot2)
+
+ggplot(organizer_summary, 
+       aes(x = reorder(paste(Part_Fname, Part_Lname), Total_Participants), 
+           y = Total_Participants)) +
+  geom_col(fill = "steelblue", alpha = 0.8) +
+  coord_flip() +
+  labs(
+    title = "Total Participants Who Attended by Event Organizer",
+    subtitle = "Zen Center Events from tigerData Package",
+    x = "Organizer",
+    y = "Total Participants Who Attended"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    axis.text = element_text(size = 10)
+  )
+```
+
+## Conclusion
+
+This analysis identified four event organizers in the Zen Center dataset, with actual attendance counts ranging from 8 to 45 participants. Ramnath Vidyanathan stands out as the most prolific organizer in terms of total participant reach, having engaged more than **`{r} round(organizer_summary$Total_Participants[1] / sum(organizer_summary$Total_Participants) * 100)`%** of all participants who attended organizer-led events in this dataset.
+
+The variation in participant counts may reflect differences in:
+
+- Number of events organized
+- Size/capacity of events
+- Duration of organizing activity
+- Type of events organized
+- Event appeal and attendance rates
+
+Further analysis could explore these factors to better understand what drives successful event participation, including examining the difference between registered participants and actual attendees.
+
+## Session Information
+
+```{r}
+#| label: session-info
+
+sessionInfo()
+```

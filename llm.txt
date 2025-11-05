@@ -1,0 +1,24 @@
+Data sets in package ‘tigerData’ are shown below.  
+Name of the data table is the first column.
+
+cars2017               Fuel Economy Data on Cars in 2017
+deathpenalty           Race and the Death Penalty
+diabetes               Diabetes Risk
+donation               Zen Center Donations
+event                  Zen Center Events
+eventParticipation     Zen Center Participants
+firesetting            Fire-setting Among Teenagers
+haliotis               Age of Sea Snails?
+lgbtplus               Homonegativity in Greek Life
+nhanes18               National Health and Nutrition Examination
+                       Survey
+parkExp                Territoriality: The Experiment
+parking                Territoriality in Parking
+participant            Zen Center Participants
+payphones              Territoriality in Pay-Phones
+reviews                Amazon.com Book Reviews
+shrooms                Can You Eat This Mushroom?
+uniformsNFL            Malevolence of NFL Uniforms and Penalty
+                       Yardage
+whately_2015           Weather data from Macleish Field Stations
+
