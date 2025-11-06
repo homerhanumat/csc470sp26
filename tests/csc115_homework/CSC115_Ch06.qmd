@@ -368,3 +368,807 @@ cat("Expected number of days to empty bag: ", round(expected_days, 4), "\n", sep
 The expected number of days to empty a bag of 20 candies is approximately **`{r} round(expected_days, 2)` days**. This makes sense because on average, you take about 5.5 candies per day (the mean of 1-10), and 20 ÷ 5.5 ≈ 3.6 days. The actual result is slightly higher because of the discrete nature of the problem (you can't take partial candies on the last day).
 
 **Note added by HSW:**  That last bit is AI nonsense:  you have to take a whole number of candies *every* day including the last day,  so being unable to take a fractional number of candies on the last day is not part of the reason for the expected value being greater than $20 / 5.5 \approx 3.63$.
+
+# Appendix:  The Databot Chat
+
+**HSW**:  Below is the chat with databot that produced this report.
+
+## Solving simulation exercises from CS textbook Chapter 6
+
+### User
+
+do the work described in llm.txt.
+
+### Databot
+
+I'll help you with the work described in llm.txt. Let me first read that file to see what needs to be done.
+<div class="toolcall" data-name="positron_getFileContents_internal" data-callid="toolu_01MCvCNRzTrCUp2ts5FfQ9vD" data-call="{
+  &quot;filePath&quot;: &quot;llm.txt&quot;
+}" ></div>
+<div class="toolcallresult" data-callid="toolu_01MCvCNRzTrCUp2ts5FfQ9vD" data-status="success" data-result="[
+  {
+    &quot;type&quot;: &quot;text&quot;,
+    &quot;text&quot;: &quot;{\&quot;contents\&quot;:\&quot;You will solve some problems from the online textbook\\n\\\&quot;Beginning Computer S...[truncated, total 1248 chars]&quot;
+  }
+]"></div>
+
+
+
+I'll access the exercises from Chapter 6 of the textbook and solve Exercises 1-4. Let me first look at the exercises.
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_01ATUpX4MperBa8s24UYTcVd" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Let me check if we can access the URL content\n# First, let&apos;s see if we have the necessar...[truncated, total 129 chars]&quot;,
+  &quot;intent&quot;: &quot;Load packages to access web content&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Load packages to access web content" ></div>
+
+```r
+# Let me check if we can access the URL content
+# First, let's see if we have the necessary packages
+library(rvest)
+library(httr)
+```
+
+
+<div class="toolcallresult" data-callid="toolu_01ATUpX4MperBa8s24UYTcVd" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_01Xj2phaKPcPjgUnqah9CnqD" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Read the exercises page\nurl <- \&quot;https://homerhanumat.github.io/r-notes/060-simulation.ht...[truncated, total 241 chars]&quot;,
+  &quot;intent&quot;: &quot;Access the exercises from the textbook&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Access the exercises from the textbook" ></div>
+
+```r
+# Read the exercises page
+url <- "https://homerhanumat.github.io/r-notes/060-simulation.html"
+page <- read_html(url)
+
+# Get the exercises section
+exercises <- page |> html_nodes("#exercises") |> html_text()
+cat(substring(exercises, 1, 2000))
+```
+
+
+```default
+Exercises
+
+
+
+
+
+
+
+Exercise 1
+Consider the following two games.
+In Game A you flip a fair coin. If the coin comes up Heads you get two dollars, whereas if it comes up Tails you get one dollar.
+In Game B you roll a fair die. If the six-spot comes up, you win twenty-five dollars. If you get 2, 3, 4, or 5, nothing happens. If the one-spot comes up, you lose fifteen dollars.
+In this exercise you need to answer two questions:
+If you could choose to play either Game A or Game B just once, which game would you prefer to play, and why?
+Suppose that you can choose either to play Game A ten thousand times, or Game B ten thousand times. Which choice would you prefer, and why?
+Answers to the first question will vary from person to person, depending on circumstances and personal taste. On the other hand, astute consideration of expected values leads most people to answer the second question in the same way. Therefore, before you answer the question please write two simulation functions: one called GameA that provides an estimate of the expected value of the winnings from a play of Game A, and another called GameB that estimates the expected value of the winnings from a play of Game B. The functions should have two parameters:
+a reps parameter to permit the user to choose the number of repetitions of the game;
+a seed parameter to permit the user to choose a starting seed.
+Use both functions with fifty thousand reps, in order to obtain estimates for the expected amount of winnings in a single play of each game. Use a simple starting seed for each function. Report the seeds you used, along with the estimated expected values for each game. Then use your results to decide which game is the better choice to play ten thousand times.
+Note: Please keep in mind that the fifty-thousand figure is just the number of times you repeat your simulations in order to estimate the expected value of a single play of one of the games. It’s not how many times you actually get to play either game—that’s 
+```
+
+<div class="toolcallresult" data-callid="toolu_01Xj2phaKPcPjgUnqah9CnqD" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;Exercises\n\n\n\n\n\n\n\nExercise 1\nConsider the following two games.\nIn Game A you flip a fair co...[truncated, total 2000 chars]&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+
+
+Good! I can access the exercises. Let me get more of the content to see all four exercises.
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_01BMxvwZJKqqizyDc9irHBWX" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Get all exercise sections\nexercises_full <- page |> \n  html_nodes(\&quot;.section.level3\&quot;) |> ...[truncated, total 339 chars]&quot;,
+  &quot;intent&quot;: &quot;Get all four exercises text&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Get all four exercises text" ></div>
+
+```r
+# Get all exercise sections
+exercises_full <- page |> 
+  html_nodes(".section.level3") |> 
+  html_text()
+
+# Print each exercise
+for (i in 1:min(4, length(exercises_full))) {
+  cat("\n\n========== EXERCISE", i, "==========\n")
+  ex_text <- exercises_full[i]
+  # Print first 3000 characters of each
+  cat(substring(ex_text, 1, 3000), "\n")
+}
+```
+
+
+```default
+
+
+========== EXERCISE 1 ==========
+NA 
+
+
+========== EXERCISE 0 ==========
+ 
+
+```
+
+<div class="toolcallresult" data-callid="toolu_01BMxvwZJKqqizyDc9irHBWX" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;\n\n========== EXERCISE 1 ==========\nNA \n\n\n========== EXERCISE 0 ==========\n \n&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+Let me try a different approach to extract the exercises:
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_01MBk3ANSFMozB7F9c93VwiN" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Try getting the raw HTML and parsing it differently\npage_text <- page |> html_text2()\n\n#...[truncated, total 313 chars]&quot;,
+  &quot;intent&quot;: &quot;Extract exercises text with a different method&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Extract exercises text with a different method" ></div>
+
+```r
+# Try getting the raw HTML and parsing it differently
+page_text <- page |> html_text2()
+
+# Find the exercises section
+ex_start <- regexpr("Exercise 1", page_text)
+if (ex_start > 0) {
+  # Get text starting from Exercise 1
+  exercises_text <- substring(page_text, ex_start, ex_start + 10000)
+  cat(exercises_text)
+}
+```
+
+
+```default
+Exercise 1
+Exercise 2
+Exercise 3
+Exercise 4
+Exercise 5
+Exercise 6*
+Exercise 7*
+// Configure the Monaco Editor's loader require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.47.0/min/vs' } });// Function to update Monaco Editors when body class changes function updateMonacoEditorsOnBodyClassChange() { // Select the body element const body = document.querySelector('body'); // Options for the observer (which mutations to observe) const observerOptions = { attributes: true, // Observe changes to attributes attributeFilter: ['class'] // Only observe changes to the 'class' attribute }; // Callback function to execute when mutations are observed const bodyClassChangeCallback = function(mutationsList, observer) { for(let mutation of mutationsList) { if (mutation.type === 'attributes' && mutation.attributeName === 'class') { // Class attribute has changed // Update all Monaco Editors on the page updateMonacoEditorTheme(); } } }; // Create an observer instance linked to the callback function const observer = new MutationObserver(bodyClassChangeCallback); // Start observing the target node for configured mutations observer.observe(body, observerOptions); } // Function to update all instances of Monaco Editors on the page function updateMonacoEditorTheme() { // Determine what VS Theme to use const vsThemeToUse = document.body.classList.contains("quarto-dark") ? 'vs-dark' : 'vs' ; // Iterate through all initialized Monaco Editors qwebrEditorInstances.forEach( function(editorInstance) { editorInstance.updateOptions({ theme: vsThemeToUse }); }); } // Call the function to start observing changes to body class updateMonacoEditorsOnBodyClassChange();// Global array to store Monaco Editor instances globalThis.qwebrEditorInstances = []; function isValidCodeLineNumbers(stringCodeLineNumbers) { // Regular expression to match valid input strings const regex = /^(\d+(-\d+)?)(,\d+(-\d+)?)*$/; return regex.test(stringCodeLineNumbers); } // Function that builds and registers a Monaco Editor instance globalThis.qwebrCreateMonacoEditorInstance = function (cellData) { const initialCode = cellData.code; const qwebrCounter = cellData.id; const qwebrOptions = cellData.options; // Retrieve the previously created document elements let runButton = document.getElementById(`qwebr-button-run-${qwebrCounter}`); let resetButton = document.getElementById(`qwebr-button-reset-${qwebrCounter}`); let copyButton = document.getElementById(`qwebr-button-copy-${qwebrCounter}`); let editorDiv = document.getElementById(`qwebr-editor-${qwebrCounter}`); // Load the Monaco Editor and create an instance let editor; require(['vs/editor/editor.main'], function () { editor = monaco.editor.create(editorDiv, { value: initialCode, language: 'r', theme: 'vs-light', automaticLayout: true, // Works wonderfully with RevealJS scrollBeyondLastLine: false, minimap: { enabled: false }, fontSize: qwebrScaledFontSize(editorDiv, qwebrOptions), renderLineHighlight: "none", // Disable current line highlighting hideCursorInOverviewRuler: true, // Remove cursor indictor in right hand side scroll bar readOnly: qwebrOptions['read-only'] ?? false, quickSuggestions: qwebrOptions['editor-quick-suggestions'] ?? false, wordWrap: (qwebrOptions['editor-word-wrap'] == 'true' ? "on" : "off") }); // Store the official counter ID to be used in keyboard shortcuts editor.__qwebrCounter = qwebrCounter; // Store the official div container ID editor.__qwebrEditorId = `qwebr-editor-${qwebrCounter}`; // Store the initial code value and options editor.__qwebrinitialCode = initialCode; editor.__qwebrOptions = qwebrOptions; // Set at the model level the preferred end of line (EOL) character to LF. // This prevent `\r\n` from being given to the webR engine if the user is on Windows. // See details in: https://github.com/coatless/quarto-webr/issues/94 // Associated error text: // Error: <text>:1:7 unexpected input // Retrieve the underlying model const model = editor.getModel(); // Set EOL for the model model.setEOL(monaco.editor.EndOfLineSequence.LF); // Dynamically modify the height of the editor window if new lines are added. let ignoreEvent = false; const updateHeight = () => { // Increment editor height by 2 to prevent vertical scroll bar from appearing const contentHeight = editor.getContentHeight() + 2; // Retrieve editor-max-height option const maxEditorHeight = qwebrOptions['editor-max-height']; // If editor-max-height is missing, allow infinite growth. Otherwise, threshold. const editorHeight = !maxEditorHeight ? contentHeight : Math.min(contentHeight, maxEditorHeight); // We're avoiding a width change //editorDiv.style.width = `${width}px`; editorDiv.style.height = `${editorHeight}px`; try { ignoreEvent = true; // The key to resizing is this call editor.layout(); } finally { ignoreEvent = false; } }; // Function to generate decorations to highlight lines // in the editor based on input string. function decoratorHighlightLines(codeLineNumbers) { // Store the lines to be lighlight let linesToHighlight = []; // Parse the codeLineNumbers string to get the line numbers to highlight // First, split the string by commas codeLineNumbers.split(',').forEach(part => { // Check if we have a range of lines if (part.includes('-')) { // Handle range of lines (e.g., "6-8") const [start, end] = part.split('-').map(Number); for (let i = start; i <= end; i++) { linesToHighlight.push(i); } } else { // Handle single line (e.g., "7") linesToHighlight.push(Number(part)); } }); // Create monaco decorations for the lines to highlight const decorations = linesToHighlight.map(lineNumber => ({ range: new monaco.Range(lineNumber, 1, lineNumber, 1), options: { isWholeLine: true, className: 'qwebr-editor-highlight-line' } })); // Return decorations to be applied to the editor return decorations; } // Ensure that the editor-code-line-numbers option is set and valid // then apply styling if (qwebrOptions['editor-code-line-numbers']) { // Remove all whitespace from the string const codeLineNumbers = qwebrOptions['editor-code-line-numbers'].replace(/\s/g,''); // Check if the string is valid for line numbers, e.g., "1,3-5,7" if (isValidCodeLineNumbers(codeLineNumbers)) { // Apply the decorations to the editor editor.createDecorationsCollection(decoratorHighlightLines(codeLineNumbers)); } else { // Warn the user that the input is invalid console.warn(`Invalid "editor-code-line-numbers" value in code cell ${qwebrOptions['label']}: ${codeLineNumbers}`); } } // Helper function to check if selected text is empty function isEmptyCodeText(selectedCodeText) { return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === ""); } // Registry of keyboard shortcuts that should be re-added to each editor window // when focus changes. const addWebRKeyboardShortCutCommands = () => { // Add a keydown event listener for Shift+Enter to run all code in cell editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => { // Retrieve all text inside the editor qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter, editor.__qwebrOptions); }); // Add a keydown event listener for CMD/Ctrl+Enter to run selected code editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => { // Get the selected text from the editor const selectedText = editor.getModel().getValueInRange(editor.getSelection()); // Check if no code is selected if (isEmptyCodeText(selectedText)) { // Obtain the current cursor position let currentPosition = editor.getPosition(); // Retrieve the current line content let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber); // Propose a new position to move the cursor to let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1); // Check if the new position is beyond the last line of the editor if (newPosition.lineNumber > editor.getModel().getLineCount()) { // Add a new line at the end of the editor editor.executeEdits("addNewLine", [{ range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1), text: "\n", forceMoveMarkers: true, }]); } // Run the entire line of code. qwebrExecuteCode(currentLine, editor.__qwebrCounter, editor.__qwebrOptions); // Move cursor to new position editor.setPosition(newPosition); } else { // Code to run when Ctrl+Enter is pressed with selected code qwebrExecuteCode(selectedText, editor.__qwebrCounter, editor.__qwebrOptions); } }); } // Register an on focus event handler for when a code cell is selected to update // what keyboard shortcut commands should work. // This is a workaround to fix a regression that happened with multiple // editor windows since Monaco 0.32.0 // https://github.com/microsoft/monaco-editor/issues/2947 editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands); // Register an on change event for when new code is added to the editor window editor.onDidContentSizeChange(updateHeight); // Manually re-update height to account for the content we inserted into the call updateHeight(); // Store the editor instance in the global dictionary qwebrEditorInstances[editor.__qwebrCounter] = editor; }); // Add a click event listener to the run button runButton.onclick = function () { qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter, editor.__qwebrOptions); }; // Add a click event listener to the reset button copyButton.onclick = function () { // Retrieve current code data const data = editor.getValue(); // Write code data onto the clipboard. navigator.clipboard.writeText(data || ""); }; // Add a click event listener to the copy button resetButton.onclick = function () { editor.setValue(editor.__qwebrinitialCode); }; }
+6 Simulation
+
+A monkey typing randomly manages to type out a line of Shakespeare. What is the chance that the monkey would produce this particular line? Source: http://www.gloryofkings.com/?p=189.
+6.1 Probability and Random Variables
+
+Your favorite college basketball team is in the NCAA Tournament. What is the chance that it will make the Final Four?
+
+An insuran
+```
+
+<div class="toolcallresult" data-callid="toolu_01MBk3ANSFMozB7F9c93VwiN" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;Exercise 1\nExercise 2\nExercise 3\nExercise 4\nExercise 5\nExercise 6*\nExercise 7*\n// Configur...[truncated, total 10001 chars]&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+The page has a lot of JavaScript. Let me try to access the specific exercises more directly:
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_016bvLQTgjJXqdYcu13WixhS" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Try to get the content more systematically\n# Get all h3 headers which should be exercise...[truncated, total 332 chars]&quot;,
+  &quot;intent&quot;: &quot;Extract exercises content systematically&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Extract exercises content systematically" ></div>
+
+```r
+# Try to get the content more systematically
+# Get all h3 headers which should be exercise titles
+exercises_html <- page |> html_nodes("div.section.level3")
+
+# Get the text content
+for (i in 1:min(4, length(exercises_html))) {
+  cat("\n\n====== EXERCISE", i, "======\n")
+  ex <- exercises_html[[i]] |> html_text2()
+  cat(ex, "\n")
+}
+```
+
+
+```default
+
+
+====== EXERCISE 1 ======
+Error in `exercises_html[[i]]`:
+! subscript out of bounds
+```
+
+<div class="toolcallresult" data-callid="toolu_016bvLQTgjJXqdYcu13WixhS" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;\n\n====== EXERCISE 1 ======\n&quot;,
+  &quot;outputError&quot;: &quot;Error in `exercises_html[[i]]`:\n! subscript out of bounds&quot;
+}"></div>
+
+Let me try a more manual approach by looking at the page structure:
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_01VTtJAZX9kSF6s24gtCAH6f" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Download the entire HTML content\nhtml_content <- read_html(url) |> html_text2()\n\n# Find ...[truncated, total 884 chars]&quot;,
+  &quot;intent&quot;: &quot;Extract exercises 1-4 by finding their positions&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Extract exercises 1-4 by finding their positions" ></div>
+
+```r
+# Download the entire HTML content
+html_content <- read_html(url) |> html_text2()
+
+# Find Exercise 1 through 4
+ex1_start <- regexpr("Exercise 1\\n", html_content)
+ex2_start <- regexpr("Exercise 2\\n", html_content)
+ex3_start <- regexpr("Exercise 3\\n", html_content)
+ex4_start <- regexpr("Exercise 4\\n", html_content)
+ex5_start <- regexpr("Exercise 5\\n", html_content)
+
+# Extract each exercise
+exercise_1 <- substring(html_content, ex1_start, ex2_start - 1)
+exercise_2 <- substring(html_content, ex2_start, ex3_start - 1)
+exercise_3 <- substring(html_content, ex3_start, ex4_start - 1)
+exercise_4 <- substring(html_content, ex4_start, ex5_start - 1)
+
+cat("=== EXERCISE 1 ===\n", exercise_1, "\n\n")
+cat("=== EXERCISE 2 ===\n", exercise_2, "\n\n")
+cat("=== EXERCISE 3 ===\n", substring(exercise_3, 1, 1500), "\n\n")
+cat("=== EXERCISE 4 ===\n", substring(exercise_4, 1, 1500), "\n\n")
+```
+
+
+```default
+=== EXERCISE 1 ===
+ Exercise 1
+ 
+
+=== EXERCISE 2 ===
+ Exercise 2
+ 
+
+=== EXERCISE 3 ===
+ Exercise 3
+ 
+
+=== EXERCISE 4 ===
+ Exercise 4
+ 
+
+
+```
+
+<div class="toolcallresult" data-callid="toolu_01VTtJAZX9kSF6s24gtCAH6f" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;=== EXERCISE 1 ===\n Exercise 1\n \n\n=== EXERCISE 2 ===\n Exercise 2\n \n\n=== EXERCISE 3 ===\n Ex...[truncated, total 136 chars]&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+The HTML structure is complex. Let me try to directly read specific IDs:
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_01Twxoak6kPWi418RDqiZPMa" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Try to get exercise content by ID\nex1_node <- page |> html_node(\&quot;#exercise-1\&quot;)\nex2_node ...[truncated, total 342 chars]&quot;,
+  &quot;intent&quot;: &quot;Try to access exercises by their HTML IDs&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Try to access exercises by their HTML IDs" ></div>
+
+```r
+# Try to get exercise content by ID
+ex1_node <- page |> html_node("#exercise-1")
+ex2_node <- page |> html_node("#exercise-2")
+ex3_node <- page |> html_node("#exercise-3")
+ex4_node <- page |> html_node("#exercise-4")
+
+if (!is.na(ex1_node)) {
+  ex1_text <- ex1_node |> html_text2()
+  cat("Exercise 1:\n", substring(ex1_text, 1, 2000), "\n\n")
+}
+```
+
+
+```default
+Exercise 1:
+ Exercise 1
+
+Consider the following two games.
+
+In Game A you flip a fair coin. If the coin comes up Heads you get two dollars, whereas if it comes up Tails you get one dollar.
+In Game B you roll a fair die. If the six-spot comes up, you win twenty-five dollars. If you get 2, 3, 4, or 5, nothing happens. If the one-spot comes up, you lose fifteen dollars.
+
+In this exercise you need to answer two questions:
+
+If you could choose to play either Game A or Game B just once, which game would you prefer to play, and why?
+Suppose that you can choose either to play Game A ten thousand times, or Game B ten thousand times. Which choice would you prefer, and why?
+
+Answers to the first question will vary from person to person, depending on circumstances and personal taste. On the other hand, astute consideration of expected values leads most people to answer the second question in the same way. Therefore, before you answer the question please write two simulation functions: one called GameA that provides an estimate of the expected value of the winnings from a play of Game A, and another called GameB that estimates the expected value of the winnings from a play of Game B. The functions should have two parameters:
+
+a reps parameter to permit the user to choose the number of repetitions of the game;
+a seed parameter to permit the user to choose a starting seed.
+
+Use both functions with fifty thousand reps, in order to obtain estimates for the expected amount of winnings in a single play of each game. Use a simple starting seed for each function. Report the seeds you used, along with the estimated expected values for each game. Then use your results to decide which game is the better choice to play ten thousand times.
+
+Note: Please keep in mind that the fifty-thousand figure is just the number of times you repeat your simulations in order to estimate the expected value of a single play of one of the games. It’s not how many times you actually get to play either game—that’s ten thous 
+
+
+```
+
+<div class="toolcallresult" data-callid="toolu_01Twxoak6kPWi418RDqiZPMa" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;Exercise 1:\n Exercise 1\n\nConsider the following two games.\n\nIn Game A you flip a fair coin...[truncated, total 2016 chars]&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+Great! Now let me get all four exercises:
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_01BwGNikCgyRsYYH6LoDsxV8" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Get all four exercises\nfor (i in 1:4) {\n  ex_node <- page |> html_node(paste0(\&quot;#exercise...[truncated, total 341 chars]&quot;,
+  &quot;intent&quot;: &quot;Extract all four exercises&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Extract all four exercises" ></div>
+
+```r
+# Get all four exercises
+for (i in 1:4) {
+  ex_node <- page |> html_node(paste0("#exercise-", i))
+  if (!is.na(ex_node)) {
+    ex_text <- ex_node |> html_text2()
+    cat("\n\n=============================================\n")
+    cat("EXERCISE", i, "\n")
+    cat("=============================================\n")
+    cat(ex_text, "\n")
+  }
+}
+```
+
+
+```default
+
+
+=============================================
+EXERCISE 1 
+=============================================
+Exercise 1
+
+Consider the following two games.
+
+In Game A you flip a fair coin. If the coin comes up Heads you get two dollars, whereas if it comes up Tails you get one dollar.
+In Game B you roll a fair die. If the six-spot comes up, you win twenty-five dollars. If you get 2, 3, 4, or 5, nothing happens. If the one-spot comes up, you lose fifteen dollars.
+
+In this exercise you need to answer two questions:
+
+If you could choose to play either Game A or Game B just once, which game would you prefer to play, and why?
+Suppose that you can choose either to play Game A ten thousand times, or Game B ten thousand times. Which choice would you prefer, and why?
+
+Answers to the first question will vary from person to person, depending on circumstances and personal taste. On the other hand, astute consideration of expected values leads most people to answer the second question in the same way. Therefore, before you answer the question please write two simulation functions: one called GameA that provides an estimate of the expected value of the winnings from a play of Game A, and another called GameB that estimates the expected value of the winnings from a play of Game B. The functions should have two parameters:
+
+a reps parameter to permit the user to choose the number of repetitions of the game;
+a seed parameter to permit the user to choose a starting seed.
+
+Use both functions with fifty thousand reps, in order to obtain estimates for the expected amount of winnings in a single play of each game. Use a simple starting seed for each function. Report the seeds you used, along with the estimated expected values for each game. Then use your results to decide which game is the better choice to play ten thousand times.
+
+Note: Please keep in mind that the fifty-thousand figure is just the number of times you repeat your simulations in order to estimate the expected value of a single play of one of the games. It’s not how many times you actually get to play either game—that’s ten thousand, in the second question.
+
+Hint: Review the coin-game simulation (Listing 6.2), and also Practice 6.4. 
+
+
+=============================================
+EXERCISE 2 
+=============================================
+Exercise 2
+
+Reconsider the meeting of Anna and Raj (Section 6.5). Suppose that they still plan to meet during the same one-hour period, but that Anna is willing to wait \(a\) minutes and Raj is willing to wait \(r\) minutes, where \(a\) and \(r\) could differ. Modify the meetupSim() function (see Listing 6.3) so that it accepts two additional parameters:
+
+a: the time Anna is willing to wait;
+r: the time Raj is willing to wait;
+
+Apply the function with ten thousand repetitions (and a simple seed that you report) in order to estimate the probability of a meeting, assuming that Anna is willing to wait 13 minutes and Raj is willing to wait 7 minutes.
+
+Hint: Suppose that Anna arrvies at time \(anna\) and Raj arrives at times \(raj\). We want a simple mathematical expression that gives the conditions for Anna and Raj to connect. In the example in the text, this was:
+
+\[\vert\ anna - raj \ \vert < 10\]
+
+because both Anna and Raj were willing to wait the same amount of time: ten minutes. Now we have to think a bit more carefully when Anna waits \(a\) minutes and Raj waits \(r\) minutes, where \(a\) and \(r\) may differ. You might start by observing that we must have
+
+\[anna \le raj + r,\]
+
+for if not then Raj would arrive and leave before Anna gets there. Also, we would have to have
+
+\[raj \le anna + a,\]
+
+for if not then Anna would arrive and leave before Raj gets there. But if we have both of those conditions:
+
+\[anna - \le raj + r \text{ and } raj \le anna + a\]
+
+then they must connect, since neither person will arrive too much before the other. 
+
+
+=============================================
+EXERCISE 3 
+=============================================
+Exercise 3
+
+Review the function duel_sim() in Practice 6.12. Modify the function as follows:
+
+Add a parameter abe that gives the probability for Abe to hit when he shoots, and a parameter bo that gives the chance for Bo to hit when he shoots. the probabilities should be expressed as numbers between 0 and 1. (Thus, a 30% chance of hitting is 0.30.)
+Make the function estimate the expected value of the number of shots taken in a dual, rather than the chance for Abe to win.
+
+When you have your function working, use it to estimate the expected number of shots when:
+
+Abe’s chance of hitting is 50% and Bo’s chance is 50%;
+Abe’s chance of hitting is 20% and Bo’s chance of hitting is 25%.
+
+In each simulation, use one hundred thousand repetitions and a seed that you choose. 
+
+
+=============================================
+EXERCISE 4 
+=============================================
+Exercise 4
+
+A candy-maker makes a particular type of candy that always has 20 candies in each bag. When you buy a bag of this candy, you take a few candies from it every day until they are all gone. The amount you take each day is a random whole number from 1 to 10. A possible scenario is:
+
+Day 1: take 4 candies. (There are 16 left.)
+Day 2: take 8 candies. (There are 8 left.)
+Day 3: take 3 candies. (There are 5 left.)
+Day 4: take 6 candies. (There were only 5 left, so you take all the remaining candies.)
+
+In the scenario above, it took you four days to finish the bag.
+
+Write a function called daysNeededSim() that will estimate the expected number of days required to empty a bag. It should take two parameters:
+
+reps: the number of times to simulate the process of emptying one bag. The default value should be 10,000.
+seed: a random seed that the user can set. The default value should be NULL.
+
+Apply the function with 50,000 repetitions and a seed that you report, in order to estimate the expected number of days required to empty the bag.
+
+Hint: This scenario is quite similar to that of the Number-Needed problem (Section 6.7). Begin by reviewing it. Like the Number-Needed problem, the basic random process here—taking candies from the bag until there are none left—is relatively complex, so you should begin by writing a helper-function to simulate that process just once. After you have the helper-function working right, use it in daysNeededSim(). 
+
+```
+
+<div class="toolcallresult" data-callid="toolu_01BwGNikCgyRsYYH6LoDsxV8" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;\n\n=============================================\nEXERCISE 1 \n==============================...[truncated, total 6342 chars]&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+Perfect! Now I have all four exercises. Let me work through them one by one. I'll start by solving each exercise, then create the Quarto document.
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_016YvDRKCutH8LKeNnUNt7oW" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Exercise 1: Game A and Game B simulation\n\n# Game A: Flip a coin - Heads = $2, Tails = $1...[truncated, total 1306 chars]&quot;,
+  &quot;intent&quot;: &quot;Solve Exercise 1 - simulate Game A and Game B&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Solve Exercise 1 - simulate Game A and Game B" ></div>
+
+```r
+# Exercise 1: Game A and Game B simulation
+
+# Game A: Flip a coin - Heads = $2, Tails = $1
+GameA <- function(reps = 10000, seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  # Simulate coin flips: sample(c("H", "T"), reps, replace = TRUE)
+  # Or more efficiently, just sample the dollar amounts directly
+  outcomes <- sample(c(2, 1), reps, replace = TRUE)
+  
+  # Expected value is the mean of all outcomes
+  expected_value <- mean(outcomes)
+  
+  return(expected_value)
+}
+
+# Game B: Roll a die
+# 6 = win $25
+# 2,3,4,5 = $0
+# 1 = lose $15
+GameB <- function(reps = 10000, seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  # Simulate die rolls
+  die_rolls <- sample(1:6, reps, replace = TRUE)
+  
+  # Calculate winnings for each roll
+  winnings <- ifelse(die_rolls == 6, 25,
+                     ifelse(die_rolls == 1, -15, 0))
+  
+  # Expected value is the mean of all outcomes
+  expected_value <- mean(winnings)
+  
+  return(expected_value)
+}
+
+# Test the functions with 50,000 reps
+seed_value <- 42
+
+cat("Using seed:", seed_value, "\n\n")
+
+ev_gameA <- GameA(reps = 50000, seed = seed_value)
+cat("Game A Expected Value: $", round(ev_gameA, 4), "\n", sep = "")
+
+ev_gameB <- GameB(reps = 50000, seed = seed_value)
+cat("Game B Expected Value: $", round(ev_gameB, 4), "\n", sep = "")
+```
+
+
+```default
+Using seed: 42 
+
+Game A Expected Value: $1.5052
+Game B Expected Value: $1.5714
+
+```
+
+<div class="toolcallresult" data-callid="toolu_016YvDRKCutH8LKeNnUNt7oW" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;Using seed: 42 \n\nGame A Expected Value: $1.5052\nGame B Expected Value: $1.5714\n&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_01AWHkvaqFFRC8yAPEezYAJ8" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Exercise 2: Meetup simulation with different wait times\n\nmeetupSim <- function(reps = 10...[truncated, total 971 chars]&quot;,
+  &quot;intent&quot;: &quot;Solve Exercise 2 - meetup simulation with different wait times&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Solve Exercise 2 - meetup simulation with different wait times" ></div>
+
+```r
+# Exercise 2: Meetup simulation with different wait times
+
+meetupSim <- function(reps = 10000, a = 10, r = 10, seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  # Generate arrival times (in minutes from 0 to 60)
+  anna_times <- runif(reps, min = 0, max = 60)
+  raj_times <- runif(reps, min = 0, max = 60)
+  
+  # They meet if:
+  # anna <= raj + r (Anna doesn't arrive too late after Raj leaves)
+  # AND raj <= anna + a (Raj doesn't arrive too late after Anna leaves)
+  meet <- (anna_times <= raj_times + r) & (raj_times <= anna_times + a)
+  
+  # Probability of meeting
+  prob_meet <- mean(meet)
+  
+  return(prob_meet)
+}
+
+# Test with Anna waiting 13 minutes and Raj waiting 7 minutes
+seed_value <- 123
+
+cat("Using seed:", seed_value, "\n\n")
+
+prob_meet <- meetupSim(reps = 10000, a = 13, r = 7, seed = seed_value)
+cat("Probability Anna and Raj meet: ", round(prob_meet, 4), "\n", sep = "")
+cat("As percentage: ", round(prob_meet * 100, 2), "%\n", sep = "")
+```
+
+
+```default
+Using seed: 123 
+
+Probability Anna and Raj meet: 0.2995
+As percentage: 29.95%
+
+```
+
+<div class="toolcallresult" data-callid="toolu_01AWHkvaqFFRC8yAPEezYAJ8" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;Using seed: 123 \n\nProbability Anna and Raj meet: 0.2995\nAs percentage: 29.95%\n&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_017rzF7FDBz2fm2AqfZQhVuh" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Exercise 3: Duel simulation\n# Modified to estimate expected number of shots (not probabi...[truncated, total 1281 chars]&quot;,
+  &quot;intent&quot;: &quot;Solve Exercise 3 - duel simulation with expected number of shots&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Solve Exercise 3 - duel simulation with expected number of shots" ></div>
+
+```r
+# Exercise 3: Duel simulation
+# Modified to estimate expected number of shots (not probability of Abe winning)
+
+duel_sim <- function(reps = 10000, abe = 0.5, bo = 0.5, seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  shot_counts <- numeric(reps)
+  
+  for (i in 1:reps) {
+    shots <- 0
+    duel_over <- FALSE
+    
+    while (!duel_over) {
+      # Abe shoots first
+      shots <- shots + 1
+      abe_hits <- runif(1) < abe
+      if (abe_hits) {
+        duel_over <- TRUE
+        next
+      }
+      
+      # Bo shoots (if Abe missed)
+      shots <- shots + 1
+      bo_hits <- runif(1) < bo
+      if (bo_hits) {
+        duel_over <- TRUE
+      }
+    }
+    
+    shot_counts[i] <- shots
+  }
+  
+  # Return the expected number of shots
+  expected_shots <- mean(shot_counts)
+  return(expected_shots)
+}
+
+# Test cases
+seed_value <- 456
+
+cat("Using seed:", seed_value, "\n\n")
+
+# Case 1: Both 50% chance
+expected_shots_1 <- duel_sim(reps = 100000, abe = 0.50, bo = 0.50, seed = seed_value)
+cat("Expected shots (Abe=50%, Bo=50%): ", round(expected_shots_1, 4), "\n", sep = "")
+
+# Case 2: Abe 20%, Bo 25%
+expected_shots_2 <- duel_sim(reps = 100000, abe = 0.20, bo = 0.25, seed = seed_value)
+cat("Expected shots (Abe=20%, Bo=25%): ", round(expected_shots_2, 4), "\n", sep = "")
+```
+
+
+```default
+Using seed: 456 
+
+Expected shots (Abe=50%, Bo=50%): 1.9999
+Expected shots (Abe=20%, Bo=25%): 4.4835
+
+```
+
+<div class="toolcallresult" data-callid="toolu_017rzF7FDBz2fm2AqfZQhVuh" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;Using seed: 456 \n\nExpected shots (Abe=50%, Bo=50%): 1.9999\nExpected shots (Abe=20%, Bo=25%): 4.4835\n&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+
+<div class="toolcall" data-name="databot_executeCodeTool" data-callid="toolu_01GkCDs8M2ki53x3MojBG5uD" data-call="{
+  &quot;language&quot;: &quot;R&quot;,
+  &quot;code&quot;: &quot;# Exercise 4: Candy bag simulation\n# Estimate expected days to empty a bag of 20 candies\n\n...[truncated, total 1071 chars]&quot;,
+  &quot;intent&quot;: &quot;Solve Exercise 4 - candy bag simulation&quot;,
+  &quot;withPlot&quot;: false
+}" data-intent="Solve Exercise 4 - candy bag simulation" ></div>
+
+```r
+# Exercise 4: Candy bag simulation
+# Estimate expected days to empty a bag of 20 candies
+
+# Helper function: simulate emptying one bag
+empty_one_bag <- function() {
+  candies_left <- 20
+  days <- 0
+  
+  while (candies_left > 0) {
+    days <- days + 1
+    # Take a random number from 1 to 10
+    candies_to_take <- sample(1:10, 1)
+    # Can't take more than what's left
+    candies_taken <- min(candies_to_take, candies_left)
+    candies_left <- candies_left - candies_taken
+  }
+  
+  return(days)
+}
+
+# Main simulation function
+daysNeededSim <- function(reps = 10000, seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  days_needed <- numeric(reps)
+  
+  for (i in 1:reps) {
+    days_needed[i] <- empty_one_bag()
+  }
+  
+  # Return expected number of days
+  expected_days <- mean(days_needed)
+  return(expected_days)
+}
+
+# Test with 50,000 repetitions
+seed_value <- 789
+
+cat("Using seed:", seed_value, "\n\n")
+
+expected_days <- daysNeededSim(reps = 50000, seed = seed_value)
+cat("Expected number of days to empty bag: ", round(expected_days, 4), "\n", sep = "")
+```
+
+
+```default
+Using seed: 789 
+
+Expected number of days to empty bag: 4.1849
+
+```
+
+<div class="toolcallresult" data-callid="toolu_01GkCDs8M2ki53x3MojBG5uD" data-status="success" data-result="{
+  &quot;outputText&quot;: &quot;Using seed: 789 \n\nExpected number of days to empty bag: 4.1849\n&quot;,
+  &quot;outputError&quot;: &quot;&quot;
+}"></div>
+
+Perfect! I've solved all four exercises. Now let me create the Quarto document with all the solutions:
+
+
+Generating Quarto report...  done!
+
+
+
+Great! I've completed all four exercises from Chapter 6 of "Beginning Computer Science With R" and created a comprehensive Quarto document. Here's what I did:
+
+#### Summary of Solutions:
+
+**Exercise 1 (Game Simulations):**
+- Created `GameA()` and `GameB()` functions to simulate expected values
+- Game A (coin flip): ~$1.51 expected value
+- Game B (dice roll): ~$1.57 expected value  
+- Concluded that Game B is better for 10,000 plays due to higher expected value
+
+**Exercise 2 (Meetup Problem):**
+- Modified `meetupSim()` to handle different wait times for Anna and Raj
+- With Anna waiting 13 min and Raj waiting 7 min: ~30% chance of meeting
+
+**Exercise 3 (Duel Simulation):**
+- Modified `duel_sim()` to estimate expected number of shots (not win probability)
+- Both at 50% accuracy: ~2 shots expected
+- Abe 20%, Bo 25%: ~4.5 shots expected
+
+**Exercise 4 (Candy Bag):**
+- Created `daysNeededSim()` with helper function `empty_one_bag()`
+- Expected days to empty 20-candy bag: ~4.2 days
+
+The Quarto document has been generated with proper formatting including sections, subsections, code chunks, and inline R expressions for reproducibility!
+
+
+
+
+
+### User
+
+R reports large numbers in scientific notation.  Can you turn this off for our Quarto deocument?
+
+### Databot
+
+I'll add the option to turn off scientific notation in the Quarto document. This is typically done with `options(scipen = 999)` in R.
+<div class="toolcall" data-name="databot_writeFileTool" data-callid="toolu_01ACg3zVtdWcAeS1BFF1CTT6" data-call="{
+  &quot;filePath&quot;: &quot;CSC115_Ch06.qmd&quot;,
+  &quot;intent&quot;: &quot;Update Quarto document to disable scientific notation&quot;,
+  &quot;content&quot;: &quot;---\ntitle: &apos;Homework Chapter 6&apos;\nauthor: \&quot;Databot\&quot;\nformat:\n  html:\n    toc: true\n    toc-de...[truncated, total 10485 chars]&quot;
+}" data-intent="Update Quarto document to disable scientific notation" ></div>
+
+**Wrote file:** `CSC115_Ch06.qmd`
+
+**Intent:** Update Quarto document to disable scientific notation
+
+
+<div class="toolcallresult" data-callid="toolu_01ACg3zVtdWcAeS1BFF1CTT6" data-status="success" data-result="{
+  &quot;success&quot;: true,
+  &quot;filePath&quot;: &quot;CSC115_Ch06.qmd&quot;,
+  &quot;intent&quot;: &quot;Update Quarto document to disable scientific notation&quot;,
+  &quot;message&quot;: &quot;Successfully wrote file at CSC115_Ch06.qmd&quot;
+}"></div>
+
+Perfect! I've updated the Quarto document to turn off scientific notation. I added a setup chunk at the beginning with `options(scipen = 999)` which tells R to avoid using scientific notation for large numbers. The `include=FALSE` option ensures this setup chunk won't appear in the rendered output.
+
+This will ensure that numbers like 10,000 or 15,000 display as regular numbers instead of scientific notation (like 1e+04 or 1.5e+04).
+
+
+
+
+
+

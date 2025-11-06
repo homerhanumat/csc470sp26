@@ -1,0 +1,4 @@
+- source: amazon-links.qmd
+  quarto-pub:
+    - id: af4091d0-d7e2-4a2d-9e09-d7b19d237dd7
+      url: https://homer.quarto.pub/amazon-book-reviews-analysis-of-cross-references
