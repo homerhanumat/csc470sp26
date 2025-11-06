@@ -366,3 +366,5 @@ cat("Expected number of days to empty bag: ", round(expected_days, 4), "\n", sep
 ```
 
 The expected number of days to empty a bag of 20 candies is approximately **`{r} round(expected_days, 2)` days**. This makes sense because on average, you take about 5.5 candies per day (the mean of 1-10), and 20 ÷ 5.5 ≈ 3.6 days. The actual result is slightly higher because of the discrete nature of the problem (you can't take partial candies on the last day).
+
+**Note added by HSW:**  That last bit is AI nonsense:  you have to take a whole number of candies *every* day including the last day,  so being unable to take a fractional number of candies on the last day is not part of the reason for the expected value being greater than $20 / 5.5 \approx 3.63$.

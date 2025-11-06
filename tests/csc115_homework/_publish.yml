@@ -1,0 +1,4 @@
+- source: CSC115_Ch06.qmd
+  quarto-pub:
+    - id: 4ddac8d0-0bad-489c-95a0-67f33fb3ad27
+      url: https://homer.quarto.pub/homework-chapter-6
