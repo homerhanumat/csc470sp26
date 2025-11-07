@@ -6,6 +6,9 @@ format:
     toc: true
     toc-depth: 3
     embed-resources: true
+    code-tools:
+      source: true
+      caption: "Source File"
 execute: 
   error: true
   warning: false

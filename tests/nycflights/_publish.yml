@@ -1,0 +1,4 @@
+- source: nycflights_analysis_report.qmd
+  quarto-pub:
+    - id: 417c3180-fe6d-4b4e-a2d5-6fe33c831243
+      url: https://homer.quarto.pub/analysis-of-nyc-flights-2013-patterns-in-delays-weather-and-aircraft-performance

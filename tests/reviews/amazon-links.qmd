@@ -9,6 +9,9 @@ format:
     toc-depth: 3
     code-fold: false
     theme: cosmo
+    code-tools:
+      source: true
+      caption: "Source File"
 ---
 
 ::: {.callout-note}
@@ -19,6 +22,12 @@ The initial prompt to Databot was:
 >The **tigerData** package contains the dataset `reviews`, of books on Amazon.com. Some of the reviews link to other books on Amazon. Find the top ten reviews, in terms of the number of other Amazon books they link to.
 
 Except for a request to format tables in the report, no further prompts were issed.  For the full conversation with Databot, consult the Appendix.
+
+**Note on Reproducibility**:  The `reviews` data table is from the **tigerData** package, whihc is available on Github.  It may be installed with:
+
+```r
+devools::install_github("homerhanumat/tigerData")
+```
 
 <!--
 To indicate human review: Delete the line above about contents not being reviewed, and replace this comment with:
